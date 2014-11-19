@@ -1,8 +1,22 @@
 class Board
-  def initialize(rows=10, cols=rows)
+  def initialize(rows=10, cols=rows, art=nil)
     @rows = rows
     @cols = cols
     @grid = blank_grid
+    if art
+      art.each_line.with_index do |line, y|
+        line.chomp.each_char.with_index do |char, x|
+          self[x, y] = char unless char == '.'
+        end
+      end
+    end
+  end
+
+  def get_neighbors(x,y)
+    [self[x, y - 1],
+     self[x + 1, y],
+     self[x, y + 1],
+     self[x - 1, y]]
   end
 
   def size
@@ -20,7 +34,7 @@ class Board
   end
 
   def [](x,y)
-    @grid[y][x]
+    @grid[y][x] if (0..@cols).include?(x) && (0..@rows).include?(y)
   end
 
   private def blank_grid

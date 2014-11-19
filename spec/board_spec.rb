@@ -14,6 +14,28 @@ describe Board do
       Then { board.size == 24 }
       Then { board.draw == "#{' '*cols}\n"*rows }
     end
+    context "from ascii art" do
+      Given(:art) { <<-"eos".gsub(/^ */,'')
+      o..
+      ...
+      eos
+      }
+      Given(:board) { Board.new(2, 3, art) }
+      Then { board[0,0] == 'o' }
+    end
+
+    context "getting neighbors" do
+      Given(:art) do
+        <<-"eos".gsub(/^ */,'')
+        1a2
+        dxb
+        4c3
+        eos
+      end
+      Given(:board) { Board.new(3, 3, art) }
+      When(:result) { board.get_neighbors(1,1) }
+      Then { result == ["a","b","c","d"] }
+    end
 
     context "one brood" do
       Given(:rows) { 4 }
